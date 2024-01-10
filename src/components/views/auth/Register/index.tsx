@@ -1,3 +1,5 @@
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
@@ -37,57 +39,11 @@ const RegisterView = () => {
         <h1 className="text-3xl font-semibold mb-4 text-center">Register</h1>
         <div className="max-w-md mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-600">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="mt-1 p-2 border rounded-md w-full"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="fullname" className="block text-sm font-medium text-gray-600">
-                Fullname
-              </label>
-              <input
-                type="text"
-                id="fullname"
-                name="fullname"
-                className="mt-1 p-2 border rounded-md w-full"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-600">
-                Phone
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                className="mt-1 p-2 border rounded-md w-full"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-600">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="mt-1 p-2 border rounded-md w-full"
-                required
-              />
-            </div>
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded-md w-full">
-              Register
-            </button>
+            <Input label="Email" name="email" type="email" />
+            <Input label="Fullname" name="fullname" type="text" />
+            <Input label="Phone" name="phone" type="tel" />
+            <Input label="Password" name="password" type="password" />
+            <Button type="submit" variant="px-8 py-2 bg-blue-600 text-white w-full rounded-md hover:bg-gray-300 hover:text-blue-600 transition duration-300">Register</Button>
           </form>
         </div>
         <p className="mt-4 text-gray-600 text-center">
