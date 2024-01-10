@@ -2,6 +2,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
+import GoogleButton from "react-google-button";
 
 const LoginView = () => {
     const router = useRouter();
@@ -60,9 +61,13 @@ const LoginView = () => {
                 required
               />
             </div>
+            <div className="flex flex-col justify-center mx-auto my-auto items-center gap-4 ">
+            <GoogleButton 
+            onClick={() => signIn("google", { callbackUrl, redirect: false })} />
             <button type="submit" className="bg-blue-500 text-white p-2 rounded-md w-full">
               Login
-            </button>
+            </button>   
+            </div>
           </form>
         </div>
         <p className="mt-4 text-gray-600 text-center">

@@ -1,8 +1,9 @@
 import { NextAuthOptions } from "next-auth";
 import  CredentialsProvider from "next-auth/providers/credentials";
-import { SignIn } from '@/lib/firebase/service';
+import { SignIn, loginWithGoogle } from '@/lib/firebase/service';
 import { compare } from "bcrypt";
 import NextAuth from "next-auth";
+import GoogleProvider from 'next-auth/providers/google'
 
 const authOptions: NextAuthOptions = {
     session: {
@@ -18,20 +19,22 @@ const authOptions: NextAuthOptions = {
             async authorize(credentials) {
                 const { email, password } = credentials as unknown as { email: string, password: string };
                 const user: any = await SignIn(email);
-
                 if (user) {
                     const passwordConfirm = await compare(password, user.password);
 
                     if (passwordConfirm) {
                         return Promise.resolve(user);
                     }
-
                     return Promise.resolve(null);
                 } else {
                     return Promise.resolve(null);
                 }
             }
         }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_OATH_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_OATH_CLIENT_SECRET || '',
+        })
     ],
     callbacks: {
         async jwt({ token, account, profile, user }: any) {
@@ -40,6 +43,20 @@ const authOptions: NextAuthOptions = {
                 token.fullname = user.fullname;
                 token.phone = user.phone;
                 token.role = user.role;
+            }
+
+            if (account?.provider === 'google') {
+                const data = {
+                    fullname : user.name,
+                    email : user.email,
+                    type : 'google', 
+                }
+
+                await loginWithGoogle(data, (data: any) => {
+                    token.email = data.email;
+                    token.fullname = data.fullname;
+                    token.role = data.role;
+                })
             }
 
             return token;
@@ -58,7 +75,6 @@ const authOptions: NextAuthOptions = {
             if ("role" in token) {
                 session.user.role = token.role;
             }
-
             return session;
         }
     },
